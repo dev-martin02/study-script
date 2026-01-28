@@ -12,14 +12,11 @@ class MyEventHandler(FileSystemEventHandler):
     def __init__(self):
         self.modified_file = None
         self.event_type = None
-        self.last_modified_time = 0
 
     def on_any_event(self, event: FileSystemEvent) -> None:
-        if event.src_path != self.modified_file or event.event_type != self.last_event_type:
+        if event.src_path != self.modified_file or event.event_type != self.event_type:
             self.modified_file = Path(event.src_path)
             self.event_type = event.event_type
-            self.last_modified_time = datetime.fromtimestamp(self.modified_file.stat().st_mtime).timestamp() 
-            # self.file_path = Path(self.last_modified_file)
 
 
 event_handler = MyEventHandler()
@@ -28,18 +25,21 @@ observer.schedule(event_handler, file_path, recursive=True)
 observer.start()
 
 try:
+
+    # Inspect all the files that weren't modified in the last 5 minutes
+    files_to_inspect = []
+    for files in Path(file_path).iterdir():
+        if files.stat().st_mtime + 300 < datetime.now().timestamp():
+            files_to_inspect.append(files)
+
+    for file in files_to_inspect:
+        print(f"Inspecting file: {file.name}")
+        inspect_file(file)
+
     while True:
         if event_handler.event_type == 'created' and  event_handler.modified_file.suffix == '.txt' and event_handler.modified_file.name != 'questions.txt':
             print(f"Formatting file: {event_handler.modified_file.name}")
             format_file(event_handler.modified_file)
-        print(event_handler.modified_file)
-        if event_handler.event_type == 'modified' and event_handler.modified_file.suffix == '.txt':
-            if event_handler.last_modified_time + 300 < datetime.now().timestamp() and event_handler.last_modified_time != 0:
-                print("File was not modified in the last 5 minutes") 
-                inspect_file(event_handler.modified_file)
-                event_handler.event_type = 'done'
-            else:
-                continue
         time.sleep(1)
 finally:
     observer.stop()
