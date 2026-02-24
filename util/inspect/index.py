@@ -1,29 +1,18 @@
 import dotenv
-from openai import OpenAI
 from pathlib import Path
+from util.ai import AIAgent
 
 dotenv.load_dotenv()
-client = OpenAI()
 
-class openaiAgent:
-    def __init__(self):
-        self.client = OpenAI()
-        self.model = "gpt-5-nano"
-
-    def generate_content(self, instruction: str, contents: str) -> str:
-        response = self.client.responses.create(
-            model=self.model,
-            reasoning={"effort": "low"},
-            input=contents,
-            instructions=instruction,
-
-        )
-        return response.output_text
-
+def organize_content(content: str) -> str:
+    return AIAgent().generate_content(
+        instruction="You are an expert, please organize the notes follw in a concise and to the point manner",
+        contents=content,
+    )
 
 def answer_questions(questions: list) -> str:
     print('waiting for the answer...')
-    return openaiAgent().generate_content(
+    return AIAgent().generate_content(
         instruction="You are an expert, please respond to all this questions in a concise and to the point manner",
         contents=str(questions),
     )
@@ -32,7 +21,7 @@ def answer_questions(questions: list) -> str:
 def inspect_file(file_path: Path) -> dict:
     full_content = ""
 
-    with open(file_path, 'r') as file:
+    with open(file_path, 'r', encoding='utf-8') as file:
         # Get the title of the file
         file_title = file.readline()
         content = file.read()
@@ -76,9 +65,9 @@ def inspect_file(file_path: Path) -> dict:
             new_content = full_content[:first_question_start]
 
             # Questions file
-            with open(question_file, 'w') as file:
+            with open(question_file, 'w', encoding='utf-8') as file:
                 file.write(answers)
 
             # Main file
-            with open(new_file_name, 'w') as file:
+            with open(new_file_name, 'w', encoding='utf-8') as file:
                 file.write(new_content)
