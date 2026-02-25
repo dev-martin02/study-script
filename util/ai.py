@@ -18,13 +18,18 @@ class AIAgent:
     def __init__(self, model="deepseek-chat"):
         self.model = model
 
-    def generate_content(self, instruction: str, contents: str) -> str: 
-        response = client.chat.completions.create(
-            model=self.model,
-            messages=[
+    def generate_content(self, instruction: str, contents: str, response_format=None) -> str: 
+        kwargs = {
+            "model": self.model,
+            "messages": [
                 {"role": "system", "content": contents},
                 {"role": "user", "content": instruction},
             ],
-            stream=False
-        )
+            "stream": False
+        }
+        
+        if response_format:
+            kwargs["response_format"] = response_format
+        
+        response = client.chat.completions.create(**kwargs)
         return response.choices[0].message.content
