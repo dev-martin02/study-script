@@ -52,16 +52,20 @@ try:
     added_files_paths = set()
     file_path_obj = Path(main_parent_path)
 
+    # Everything should always be in a loop?
     while True:
-        if event_handler.event_type == 'created' and event_handler.modified_file.suffix == '.txt' and event_handler.modified_file.name != 'questions.txt':
-            print(f"Formatting file: {event_handler.modified_file.name}")
-            format_file(event_handler.modified_file)
+        if event_handler.modified_file and event_handler.event_type:
+            if (event_handler.modified_file.suffix == ".txt"):
+                if event_handler.event_type == 'created':
+                    format_file(event_handler.modified_file)
 
-        if event_handler.modified_file and event_handler.modified_file.parent == file_path_obj: 
-            if event_handler.event_type == "modified" and event_handler.modified_file not in added_files_paths:
-                print(f"Tracking new file: {event_handler.modified_file.name}")
-                added_files_paths.add(event_handler.modified_file)
-
+                # ! For some reason if I created a file it would automatically added it to the inspection queue and send it to the AI, while the file only have the "format" content only
+                # Check if the file is empty, if it is then we wait for it to be modified and then we format it, if it's not empty then we format it right away
+                elif event_handler.event_type == 'modified' and event_handler.modified_file.parent == file_path_obj and event_handler.modified_file not in added_files_paths and event_handler.modified_file.stat().st_size > 0:
+                    print(f"Tracking modified file: {event_handler.modified_file.name}")
+                    added_files_paths.add(event_handler.modified_file)
+                else:
+                    format_file(event_handler.modified_file)           
         if(added_files_paths):
             # Create a folder called inspection-in-queue and move all the files in the set to that folder
             inspection_queue_folder = Path(main_parent_path) / "inspection-in-queue"

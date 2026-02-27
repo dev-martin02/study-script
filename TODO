@@ -1,0 +1,30 @@
+[] Make an agent that would analyze your notes and would separate them for you to fit the format that you want
+  [x] Create intelligent_sorting function to categorize content
+  [x] Create move_file_to_folder function to organize files
+  [] Add error recovery for failed file moves
+
+[] How should I create folder? to structure the content
+  [] Create initial folder structure template in config
+  [] Add ability to suggest new folder names based on content patterns
+  [] Implement folder hierarchy/subfolders support
+
+[] Improve robustness and error handling
+  [] Add logging system (instead of print statements)
+  [] Handle file conflicts when moving (duplicate filenames)
+  [] Add retry logic for file operations that fail
+  [] Clean up inspection-in-queue after successful processing
+
+[] Add monitoring and tracking
+  [] Create a simple dashboard/status file to see processing progress
+  [] Track which files have been processed and moved
+  [] Add option to view file move history
+
+[] Performance and scale
+  [] Handle batch processing of multiple files efficiently
+  [] Add configuration file for settings (batch size, delay, etc.)
+  [] Optimize AI API calls to reduce costs
+
+[] User experience
+  [] Add command-line arguments to customize behavior
+  [] Create undo functionality to move files back
+  [] Add validation before moving files to warn of conflicts 

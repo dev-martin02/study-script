@@ -1,2 +1,3 @@
 .env
-TODO
+__pycache__/
+*.pyc
