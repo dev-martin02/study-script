@@ -28,3 +28,7 @@
   [] Add command-line arguments to customize behavior
   [] Create undo functionality to move files back
   [] Add validation before moving files to warn of conflicts 
+
+  Create a new folder structure where it would be more easier to organized the notes
+
+  Also make sure you are cleanning the code and removing comments and piece of code 
