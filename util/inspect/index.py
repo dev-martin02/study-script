@@ -1,5 +1,7 @@
 import json
 from pathlib import Path
+from dataclasses import dataclass
+from distro import name
 from util.ai import AIAgent
 
 def answer_questions(questions: list[str]) -> str:
@@ -25,26 +27,14 @@ def intelligent_sorting(folders: list[str], content: str) -> str:
         response_format={"type": "json_object"},
     )
 
-def move_file_to_folder(file_path: Path, sorting_result: str, base_path: str | Path) -> Path:
+def move_file_to_folder(file_obj: dict, sorting_result: str | None = None) -> Path:
     """Moves a file to a folder based on the JSON output from intelligent_sorting."""
-    result = json.loads(sorting_result)
-    folder_name = result["folder_name"]
-    create_one = result["create_one"]
-
-    target_folder = Path(base_path) / folder_name
-    if create_one or not target_folder.exists():
-        target_folder.mkdir(parents=True, exist_ok=True)
-        print(f"Created folder: {target_folder}")
-
-    target_path = target_folder / file_path.name
-    if target_path != file_path:
-        file_path.rename(target_path)
-        print(f"Moved {file_path.name} to {target_folder}")
-    else:
-        print(f"File {file_path.name} is already in {target_folder}")
-        target_path = file_path
-
-    return target_path
+    if sorting_result:
+        result = json.loads(sorting_result)
+        folder_name = result["folder_name"]
+        create_one = result["create_one"]
+    file_obj.current_path.rename(file_obj.new_location_folder)
+    # print(f"Moved {file_obj['current_path'].name} to {file_obj['new_location_folder'].name}")
 
 def inspect_file(file_path: Path) -> None:
     full_content = ""

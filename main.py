@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import platform
 import time
 from pathlib import Path
@@ -14,7 +15,16 @@ else:
     main_parent_path = Path.home() / "Desktop" / "study-hub"
 
 inspection_queue_name = "inspection-in-queue"
+
+# Create main parent folder if it doesn't exist and subfolders
 main_parent_path.mkdir(parents=True, exist_ok=True)
+
+for folder_name in ["Inbox", "Content", "Problems"]:
+    (main_parent_path / folder_name).mkdir(parents=True, exist_ok=True)
+
+# Inbox structure
+for subfolder in ["Structuring", "Naming", "in-queue"]:
+    (main_parent_path / "Inbox" / subfolder).mkdir(parents=True, exist_ok=True)
 
 def get_all_folders() -> list[str]:
     return [
@@ -22,7 +32,6 @@ def get_all_folders() -> list[str]:
         for item in main_parent_path.iterdir()
         if item.is_dir() and item.name != inspection_queue_name
     ]
-
 
 class MyEventHandler(FileSystemEventHandler):
     def __init__(self) -> None:
@@ -35,12 +44,32 @@ class MyEventHandler(FileSystemEventHandler):
             self.modified_file = current_file
             self.event_type = event.event_type
 
-
 event_handler = MyEventHandler()
 observer = Observer()
 observer.schedule(event_handler, str(main_parent_path), recursive=True)
 observer.start()
 
+def check_folder_content(folder_name: str): 
+    folder_path = main_parent_path / folder_name
+    number_of_files = len(list(folder_path.glob("*.*")))
+    return number_of_files
+
+
+"""
+    Work flow structure
+    1. Create main folder if not exists
+    2. Create 3 more folders in main folder if not exists
+        - Inbox
+            This folder would have 3 subfolders
+                - Structuring
+                - Naming
+                - in-queue 
+            upcoming files will be moved here for inspection and sorting 
+        - Content
+            sorted files will be moved here
+        - Problems
+            files with problems will be moved here as well as others problems file detailing the problem that has occured during the process
+"""
 try:
     added_files_paths: set[Path] = set()
     inspection_queue_folder = main_parent_path / inspection_queue_name
@@ -55,28 +84,26 @@ try:
             if current_file.suffix == ".txt" and current_file.exists():
                 if current_event == "created":
                     format_file(current_file)
-                elif (
-                    current_event == "modified"
-                    and current_file.parent == main_parent_path
-                    and current_file not in added_files_paths
-                    and current_file.stat().st_size > 0
-                ):
-                    print(f"Tracking modified file: {current_file.name}")
-                    added_files_paths.add(current_file)
                 else:
                     format_file(current_file)
 
-        if added_files_paths:
-            inspection_queue_folder.mkdir(parents=True, exist_ok=True)
-            for file in added_files_paths:
-                file.rename(inspection_queue_folder / file.name)
-            added_files_paths.clear()
-
+        if check_folder_content('Inbox') > 0:
+                for file in (main_parent_path / "Inbox").iterdir():
+                    if file.is_file() and file.suffix == ".txt":
+                        @dataclass
+                        class File_handler:
+                            current_path: Path
+                            new_location_folder: Path
+                        file_handler = File_handler(
+                            current_path=file,
+                            new_location_folder=main_parent_path / "Inbox" / "in-queue" / file.name
+                        )
+                        move_file_to_folder(file_handler)
+            # files in-que should be inspected and sorted intelligently and moved to the right folder
         if inspection_queue_folder.exists():
             for file in inspection_queue_folder.iterdir():
                 if not file.is_file():
                     continue
-
                 try:
                     agent_format_file(file)
                     print(f"Finished formatting file: {file.name}")
