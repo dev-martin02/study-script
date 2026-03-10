@@ -2,10 +2,8 @@ from dataclasses import dataclass
 import platform
 import time
 from pathlib import Path
-
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
-
 from util.file_format.format import agent_format_file, format_file
 from util.inspect.index import intelligent_sorting, move_file_to_folder
 
