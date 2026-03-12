@@ -1,7 +1,0 @@
-Code Snipet
-	- A CLI tool that would take screenshots of your code and would edit for you (perfect for content creation)
-
-Watcher AI
-	- A tool that would track your time in you pc (brower) and would also ban some websites from you until you meet x tasks
-	Feature
-		If you are doomscroling it would scared you, by using five night toys

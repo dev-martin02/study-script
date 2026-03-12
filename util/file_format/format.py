@@ -1,14 +1,11 @@
 from pathlib import Path
-
 from util.ai import AIAgent
 
 structure_path = "util/file_format/format.txt"
 structure = Path(structure_path).read_text(encoding="utf-8")
 
-
 def format_file(file_path: Path) -> None:
     file_path.write_text(structure, encoding="utf-8")
-
 
 def agent_format_file(file_path: Path) -> None:
     print(f"\n[AI] Starting formatting: {file_path.name}...")

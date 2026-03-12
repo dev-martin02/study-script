@@ -8,6 +8,8 @@ dependencies = [
     "google-genai>=1.57.0",
     "google-generativeai>=0.8.6",
     "openai>=2.15.0",
+    "pydantic>=2.12.5",
     "python-dotenv>=1.2.1",
+    "typer>=0.24.1",
     "watchdog>=6.0.0",
 ]

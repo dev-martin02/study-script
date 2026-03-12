@@ -1,34 +1,14 @@
 import json
 from pathlib import Path
-from dataclasses import dataclass
-from distro import name
 from util.ai import AIAgent
-
+    
 def answer_questions(questions: list[str]) -> str:
-    print("Waiting for the answer...")
     return AIAgent().generate_content(
         instruction="You are an expert, please respond to all this questions in a concise and to the point manner",
         contents=str(questions),
     )
 
-def intelligent_sorting(folders: list[str], content: str) -> str:
-    folder_names = ", ".join(folders)
-    instruction = (
-        "You are an expert organizing content. Review the file content and choose the best folder "
-        f"from this list: {folder_names}. "
-        "If none fits, suggest a new folder name and set create_one to true. "
-        "Return JSON only in this format: "
-        '{"folder_name": "String", "create_one": "Boolean"}'
-    )
-
-    return AIAgent().generate_content(
-        instruction=instruction,
-        contents=content,
-        response_format={"type": "json_object"},
-    )
-
-def move_file_to_folder(file_obj: dict, sorting_result: str | None = None) -> Path:
-    """Moves a file to a folder based on the JSON output from intelligent_sorting."""
+def relocate_file(file_obj: dict, sorting_result: str | None = None) -> Path:
     if sorting_result:
         result = json.loads(sorting_result)
         folder_name = result["folder_name"]
