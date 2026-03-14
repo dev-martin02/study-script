@@ -38,12 +38,13 @@ class AIAgent:
 
 def intelligent_sorting(folders: list[str], content: str) -> str:
     folder_names = ", ".join(folders)
+    print(folder_names)
     instruction = (
-        "You are an expert organizing content. Review the file content and choose the best folder "
-        f"from this list: {folder_names}. "
-        "If none fits, suggest a new folder name and set create_one to true. "
-        "Return JSON only in this format: "
-        '{"folder_name": "String", "create_one": "Boolean"}'
+        "You are an expert at organizing files into folders. Review the following file content and determine the single most appropriate folder "
+        f"{'If there are no folders available, create an appropriate folder name.' if not folder_names else f'from this list: {folder_names}.'} "
+        "If none of the existing folders are a good fit, suggest a new folder name and set create_one to true in your response. "
+        "Respond ONLY with a valid JSON object in this exact format: "
+        '{"folder_name": "string", "create_one": true or false}'
     )
 
     return AIAgent().generate_content(
