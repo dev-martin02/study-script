@@ -14,8 +14,10 @@ def agent_format_file(file_path: Path) -> None:
 
         formatted_content = AIAgent().generate_content(
             instruction=(
-                "You are an expert at organizing notes. Format the content using this template: "
-                f"{structure}. Keep notes above the questions section and use bullet points."
+            "You are an expert at organizing markdown notes. Format the provided content using this structure: "
+            f"{structure}\n\n"
+            "Guidelines: Keep all notes above the questions section, use bullet points for lists, "
+            "maintain clarity and readability, preserve all original information."
             ),
             contents=content,
         )

@@ -14,13 +14,13 @@ def relocate_file(file_obj: dict, sorting_result: str | None = None) -> Path:
         folder_name = result["folder_name"]
         create_one = result["create_one"]
         print(sorting_result)
+        new_folder = file_obj.new_location_folder/ folder_name
         if create_one:
-            new_folder = file_obj.new_location_folder/ folder_name
             new_folder.mkdir(parents=True, exist_ok=True)
             file_obj.current_path.rename(new_folder / file_obj.current_path.name)
         else:
             # new_location_folder is a directory (e.g. Content); move file into it
-            file_obj.current_path.rename(file_obj.new_location_folder / file_obj.current_path.name)
+            file_obj.current_path.rename(new_folder / file_obj.current_path.name)
     else:
         file_obj.new_location_folder.parent.mkdir(parents=True, exist_ok=True)
         file_obj.current_path.rename(file_obj.new_location_folder)

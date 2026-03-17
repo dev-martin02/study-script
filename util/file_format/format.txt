@@ -1,22 +1,34 @@
 Title:
 Subject:
 
-====================
-Overview
-====================
+# [Course Name]: [Lecture Title]
+**Date:** March 16, 2026 | **Topic:** Chemical Bonds
 
-====================
-Concepts
-====================
+## 🎯 Overview
+*A 1-sentence summary of the "vibe" of today's lecture.*
 
-====================
-Details
-====================
+---
 
-====================
-Key Points
-====================
+## 🧠 Core Concepts
+* **Term 1:** The "official" definition.
+* **Term 2:** How the professor explained it in plain English.
 
-====================
-Questions
-====================
+---
+
+## 📝 The Deep Dive (Details)
+- **Main Heading**
+    - Specific note or formula.
+    - *Example:* If $A = B$ and $B = C$, then... 
+    - 💡 **Prof's Hint:** "This will definitely be on the midterm."
+
+---
+
+## 🔑 Key Takeaways
+* **The Big Idea:** If I forget everything else, I must remember this.
+* **Connection:** How this relates to last week's lecture on X.
+
+---
+
+## ❓ Unresolved Questions
+* [ ] I didn't quite catch the part about...
+* [ ] Ask the TA: Does this apply to all cases or just...?
